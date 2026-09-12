@@ -6,7 +6,7 @@ import (
 	amqp "github.com/rabbitmq/amqp091-go"
 )
 
-func rbMQConnect(url string) (*amqp.Connection, error) {
+func RabbitMQConnect(url string) (*amqp.Connection, error) {
 	conn, err := amqp.Dial(url)
 	if err != nil {
 		log.Printf("Failed to connect to RabbitMQ: %v", err)
