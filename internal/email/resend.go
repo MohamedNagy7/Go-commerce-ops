@@ -19,7 +19,7 @@ func NewResendProvider() *ResendProvider {
 	}
 }
 
-func (r *ResendProvider) Send(ctx context.Context, msg Message, fileContent string) error {
+func (r *ResendProvider) Send(ctx context.Context, msg Message, attachment []byte, filename string) error {
 	_, err := r.client.Emails.SendWithContext(ctx, &resend.SendEmailRequest{
 		From:    r.from,
 		To:      []string{msg.To},
@@ -29,8 +29,8 @@ func (r *ResendProvider) Send(ctx context.Context, msg Message, fileContent stri
 
 		Attachments: []*resend.Attachment{
 			{
-				Filename: "sample.txt",
-				Content:  []byte(fileContent),
+				Filename: filename,
+				Content:  attachment,
 			},
 		},
 	})

@@ -3,11 +3,9 @@ package pdf
 import (
 	"bytes"
 	"fmt"
-	"strconv"
-	"time"
 
 	"codeberg.org/go-pdf/fpdf"
-	"github.com/MohamedNagy7/Go-commerce-ops/internal/rabbitmq"
+	"github.com/MohamedNagy7/Go-commerce-ops/internal/invoice"
 )
 
 // ---------- Color palette ----------
@@ -31,15 +29,12 @@ func setDrawColor(p *fpdf.Fpdf, c pdfColors) { p.SetDrawColor(c.r, c.g, c.b) }
 func setTextColor(p *fpdf.Fpdf, c pdfColors) { p.SetTextColor(c.r, c.g, c.b) }
 
 func money(v float64) string {
-	if v != float64(0) {
-		return strconv.FormatFloat(v, 'f', 2, 64)
-	}
 	return fmt.Sprintf("$%.2f", v)
 }
 
 // ---------- Invoice generation ----------
 
-func GenerateInvoicePDF(payload rabbitmq.InvoiceRequestedPayload) ([]byte, error) {
+func GenerateInvoicePDF(payload invoice.InvoiceData) ([]byte, error) {
 	pdfDoc := fpdf.New("P", "mm", "A4", "")
 	pdfDoc.SetMargins(15, 15, 15)
 	pdfDoc.SetAutoPageBreak(true, 25)
@@ -61,7 +56,7 @@ func GenerateInvoicePDF(payload rabbitmq.InvoiceRequestedPayload) ([]byte, error
 
 	pdfDoc.SetX(pageWidth - marginLeft - 60)
 	pdfDoc.SetFont("Arial", "", 11)
-	pdfDoc.Cell(60, 12, fmt.Sprintf("Date: %s", time.Now().Format("Jan 02, 2006")))
+	pdfDoc.Cell(60, 12, fmt.Sprintf("Date: %s", payload.IssuedAt))
 
 	setTextColor(pdfDoc, colorText)
 
@@ -77,7 +72,7 @@ func GenerateInvoicePDF(payload rabbitmq.InvoiceRequestedPayload) ([]byte, error
 
 	pdfDoc.SetFont("Arial", "", 11)
 	setTextColor(pdfDoc, colorText)
-	pdfDoc.Cell(90, 6, payload.Email)
+	pdfDoc.Cell(90, 6, payload.CustomerEmail)
 	pdfDoc.Ln(6)
 
 	// Right: invoice details
@@ -151,7 +146,7 @@ func GenerateInvoicePDF(payload rabbitmq.InvoiceRequestedPayload) ([]byte, error
 	}
 
 	drawTotalsRow("Subtotal:", money(subtotal), false, false, 11)
-	drawTotalsRow("Total:", money(payload.TotalAmount), true, true, 13)
+	drawTotalsRow("Total:", money(payload.Total), true, true, 13)
 
 	// ---------- Footer ----------
 	pdfDoc.SetY(-30)

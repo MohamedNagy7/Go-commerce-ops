@@ -9,5 +9,5 @@ type Message struct {
 }
 
 type Provider interface {
-	Send(ctx context.Context, msg Message) error
+	Send(ctx context.Context, msg Message, attachment []byte, filename string) error
 }
