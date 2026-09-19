@@ -19,20 +19,23 @@ func NewResendProvider() *ResendProvider {
 	}
 }
 
-func (r *ResendProvider) Send(ctx context.Context, msg Message, attachment []byte, filename string) error {
+func (r *ResendProvider) Send(ctx context.Context, msg Message) error {
+	atts := make([]*resend.Attachment, 0, len(msg.Attachments))
+	for _, a := range msg.Attachments {
+		atts = append(atts, &resend.Attachment{
+			Content:     a.Content,
+			Filename:    a.Filename,
+			ContentType: a.ContentType,
+			ContentId:   a.ContentID,
+		})
+	}
 	_, err := r.client.Emails.SendWithContext(ctx, &resend.SendEmailRequest{
-		From:    r.from,
-		To:      []string{msg.To},
-		Subject: msg.Subject,
-		Html:    msg.Html,
-		ReplyTo: r.from,
-
-		Attachments: []*resend.Attachment{
-			{
-				Filename: filename,
-				Content:  attachment,
-			},
-		},
+		From:        r.from,
+		To:          []string{msg.To},
+		Subject:     msg.Subject,
+		Html:        msg.Html,
+		ReplyTo:     r.from,
+		Attachments: atts,
 	})
 	return err
 }

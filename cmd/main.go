@@ -40,9 +40,16 @@ func main() {
 		return
 	}
 
+	logoPng, logoErr := os.ReadFile("D:/Go_Lang/go-commerce-ops/internal/assets/favicon.png")
+	if logoErr != nil {
+		fmt.Println("Error loading logo", logoErr)
+		return
+	}
+
 	processor := &invoice.Processor{
 		GeneratePDF: pdf.GenerateInvoicePDF,
 		Email:       email.NewResendProvider(),
+		LogoPNG:     logoPng,
 	}
 
 	if err := rabbitmq.StartInvoiceConsumer(ch, processor.Process); err != nil {
