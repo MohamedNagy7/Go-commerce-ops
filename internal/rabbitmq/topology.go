@@ -11,7 +11,7 @@ const (
 	InvoiceRoutingKey = "invoice.requested"
 )
 
-// Idempotent — same guarantee as the Nest setupTopology. Safe to call on every boot
+// SetupTopology Idempotent — same guarantee as the Nest setupTopology. Safe to call on every boot
 func SetupTopology(ch *amqp.Channel) error {
 	if err := ch.ExchangeDeclare(Exchange, "topic", true, false, false, false, nil); err != nil {
 		return err
