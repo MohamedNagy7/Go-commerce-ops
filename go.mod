@@ -1,6 +1,6 @@
 module github.com/MohamedNagy7/Go-commerce-ops
 
-go 1.26.1
+go 1.27.1
 
 require (
 	github.com/joho/godotenv v1.5.1
