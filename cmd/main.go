@@ -7,11 +7,12 @@ import (
 	"os/signal"
 	"syscall"
 
+	"github.com/MohamedNagy7/Go-commerce-ops/internal/assets"
 	"github.com/MohamedNagy7/Go-commerce-ops/internal/email"
 	"github.com/MohamedNagy7/Go-commerce-ops/internal/invoice"
 	"github.com/MohamedNagy7/Go-commerce-ops/internal/pdf"
 	"github.com/MohamedNagy7/Go-commerce-ops/internal/rabbitmq"
-	_ "github.com/joho/godotenv"
+	_ "github.com/joho/godotenv/autoload"
 )
 
 func main() {
@@ -46,11 +47,7 @@ func main() {
 		return
 	}
 
-	logoPng, logoErr := os.ReadFile("D:/Go_Lang/go-commerce-ops/internal/assets/favicon.png")
-	if logoErr != nil {
-		fmt.Println("Error loading logo", logoErr)
-		return
-	}
+	logoPng := assets.LogoPng
 
 	processor := &invoice.Processor{
 		GeneratePDF: pdf.GenerateInvoicePDF,
