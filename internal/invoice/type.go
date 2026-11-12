@@ -10,6 +10,7 @@ type LineItem struct {
 
 type InvoiceData struct {
 	OrderID       string
+	CustomerName  string
 	CustomerEmail string
 	Items         []LineItem
 	Subtotal      float64

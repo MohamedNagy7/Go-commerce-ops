@@ -66,7 +66,7 @@ func main() {
 	fmt.Println("shutting down")
 
 	appServer := &http.Server{
-		Addr:    ":8080",
+		Addr:    ":5050",
 		Handler: helathEndpoint,
 	}
 

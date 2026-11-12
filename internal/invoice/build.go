@@ -17,6 +17,7 @@ func BuildInvoiceData(payload rabbitmq.InvoiceRequestedPayload) InvoiceData {
 
 	return InvoiceData{
 		OrderID:       payload.OrderID,
+		CustomerName:  payload.CustomerName,
 		CustomerEmail: payload.Email,
 		Items:         items,
 		Subtotal:      subtotal,

@@ -89,7 +89,7 @@ func GenerateInvoicePDF(data invoice.InvoiceData, logoPNG []byte) ([]byte, error
 	pdfDoc.SetXY(marginLeft, y)
 	pdfDoc.SetFont("Arial", "", 11)
 	setTextColor(pdfDoc, colorText)
-	pdfDoc.Cell(contentWidth, 6, fmt.Sprintf("Hello %s,", data.CustomerEmail))
+	pdfDoc.Cell(contentWidth, 6, fmt.Sprintf("Hello %s,", data.CustomerName))
 	pdfDoc.Ln(7)
 	pdfDoc.SetX(marginLeft)
 	pdfDoc.SetFont("Arial", "", 11)
@@ -185,7 +185,7 @@ func GenerateInvoicePDF(data invoice.InvoiceData, logoPNG []byte) ([]byte, error
 
 	pdfDoc.SetFont("Arial", "I", 8.5)
 	setTextColor(pdfDoc, colorMuted)
-	pdfDoc.CellFormat(contentWidth, 5, "Thank you for your purchase! This invoice was generated automatically.", "", 1, "C", false, 0, "")
+	pdfDoc.CellFormat(contentWidth, 5, "Thank you for your purchase!", "", 1, "C", false, 0, "")
 	pdfDoc.SetFont("Arial", "", 8)
 	pdfDoc.CellFormat(contentWidth, 5, fmt.Sprintf("Order #%s  |  %s", data.OrderID, data.IssuedAt.Format("Jan 02, 2006 3:04 PM")), "", 1, "C", false, 0, "")
 
