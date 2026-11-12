@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
@@ -16,13 +15,6 @@ import (
 )
 
 func main() {
-	// ctx := context.Background()
-
-	helathEndpoint := http.NewServeMux()
-	helathEndpoint.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
-		w.WriteHeader(http.StatusOK)
-		w.Write([]byte("OK"))
-	}) 
 
 	rabbitConn, rabbitmqErr := rabbitmq.RabbitMQConnect(os.Getenv("RABBITMQ_URL"))
 	if rabbitmqErr != nil {
@@ -64,15 +56,5 @@ func main() {
 	signal.Notify(sigCh, syscall.SIGINT, syscall.SIGTERM)
 	<-sigCh
 	fmt.Println("shutting down")
-
-	appServer := &http.Server{
-		Addr:    ":5050",
-		Handler: helathEndpoint,
-	}
-
-	if err := appServer.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-		fmt.Println("Error starting server", err)
-		return
-	}
 
 }
